@@ -21,7 +21,7 @@ export default class Auth {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
         this.history.push("/");
-      } else if (err) { 
+      } else if (err) {
         this.history.push("/");
         alert(`Error: ${err.error}. Check the console for further details.`);
         console.log(err);
@@ -35,8 +35,13 @@ export default class Auth {
       authResult.expiresIn * 1000 + new Date().getTime()
     );
 
-    localStorage.setItem("access_token", authResult.accessToken)
-    localStorage.setItem("id_token", authResult.idToken)
-    localStorage.setItem("expires_at", expiresAt)
+    localStorage.setItem("access_token", authResult.accessToken);
+    localStorage.setItem("id_token", authResult.idToken);
+    localStorage.setItem("expires_at", expiresAt);
   };
+
+  isAuthenticated() {
+    const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
+    return new Date().getTime() < expiresAt;
+  }
 }
